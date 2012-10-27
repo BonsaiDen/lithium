@@ -1,0 +1,32 @@
+{
+    "version": "0.0.1",
+    "name": "lithium",
+    "description": "A data centric WebSocket library for both Node.js and the Browser.",
+    "keywords": ["web socket", "", "", ""],
+
+    "author": "Ivo Wetzel <ivo.wetzel@googlemail.com>",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/BonsaiDen/lithium"
+    },
+
+    "bugs": {
+        "url": "http://github.com/BonsaiDen/lithium/issues"
+    },
+
+    "directories": {
+        "lib": "./lib"
+    },
+
+    "main": "./lib/lithium.js"
+
+    "engines": {
+        "node": ">=0.6"
+    },
+
+    "licenses": [{
+        "type": "MIT",
+        "url": "https://github.com/BonsaiDen/lithium/raw/master/LICENSE"
+    }]
+}
+
