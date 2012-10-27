@@ -66,7 +66,7 @@ A `http.Server`-like interface for managing web socket connections.
 
 #### Methods
 
-- __lithium.Server([callback] [, encoder, decoder])__ *(Constructor)*
+- __lithium.Server([function:callback] [, function:encoder, function:decoder])__ *(Constructor)*
 
     Creates a new server instance.
 
@@ -78,7 +78,7 @@ A `http.Server`-like interface for managing web socket connections.
     For example, in order to process and treat all messages as JSON objects pass
 
 
-- __listen(port [, hostname])__
+- __listen(integer:port [, string:hostname])__
 
     Makes the server listen for incoming web socket requests on `port` and - 
     optionally - `hostname`.
@@ -90,7 +90,7 @@ A `http.Server`-like interface for managing web socket connections.
     instance of `http.Server` or `https.Server`.
 
 
-- __remotes([filter])__
+- __remotes([function:filter])__
 
     Returns a array with all remotes that are currently connected to the server 
     (meaning that only accepted remotes will be contained in the array).
@@ -99,21 +99,26 @@ A `http.Server`-like interface for managing web socket connections.
     filters the remotes before returning them.
 
 
-- __send(message [, filter])__
+- __send(any:message [, function:filter])__
 
     Sends a message to all *accepted* remotes on the server. 
 
     Filter is an optional function behaving much like `Array.filter` in that it 
     filters the remotes before messaging them.
 
+    Returns the number of remotes the message was sent to.
 
-- __close([message])__
+
+- __close([string:reason])__
     
     Closes the server by preventing any furhter connections to be made and 
     invokes the `close` method of all the server's remotes.
 
-    Also sends an optional `message` to all *accepted* remotes before closing 
-    their connections. 
+    The optional `reason` is only supported in newer versions of the WebSocket 
+    protocol and will be available as the `reason` property on the WebSocket's 
+    close event.
+
+    Returns `false` in case the server is already closed.
 
 
 #### Events
@@ -155,22 +160,36 @@ A remote is only recognized as being connected after it was accepted.
 
 #### Properties
 
-- __id__
+- __id__ *string*
 
-- __address__
 
-- __port__
+- __address__  *string*
 
-- __bytesSend__
+    Address of the underlying socket connection.
 
-- __bytesReceived__
 
-- __version__
+- __port__  *integer*
+
+    Port of the underlying socket connection.
+
+
+- __bytesSend__  *integer*
+
+    Number of raw bytes (including protocol overhead) send over the socket.
+
+- __bytesReceived__  *integer*
+
+    Number of raw bytes (including protocol overhead) send over the socket.
+
+
+- __version__ *integer*
+
+    The version of the underlying WebSocket protocol for this remote.
 
 
 #### Methods
 
-- __accept()__
+- __accept()__ => *boolean*
 
     Accepts a pending remote connection, which adds it to the list of connected 
     remotes on the server.
@@ -181,7 +200,7 @@ A remote is only recognized as being connected after it was accepted.
     not be accepted.
 
 
-- __reject([reason])__
+- __reject([string:reason])__ => *boolean*
 
     Rejects a pending remote and sends an optional `reason` as a message before 
     closing the connection. 
@@ -190,12 +209,14 @@ A remote is only recognized as being connected after it was accepted.
     not be rejected.
 
 
-- __isPending()__
+- __isPending()__ => *true*
     
     Returns whether or not the connection is pending.
 
+    Pending means that the connection is yet to be either accepted or rejected.
 
-- __info()__
+
+- __info()__ => *object*
 
     Returns a object containing connection specific information:
 
@@ -209,7 +230,7 @@ A remote is only recognized as being connected after it was accepted.
     > Note: The returned object is a reference.
 
 
-- __send(message)__
+- __send(any:message)__ => *boolean*
     
     Sends a `message` to the remote.
 
@@ -217,10 +238,13 @@ A remote is only recognized as being connected after it was accepted.
     not be send.
 
 
-- __close([message])__
+- __close([any:reason])__
 
-    Closes the connection to the remote, and optional `message` can be send 
-    right before the connection is being closed.
+    Closes the connection to the remote. 
+    
+    The optional `reason` is only supported in newer versions of the WebSocket 
+    protocol and will be available as the `reason` property on the WebSocket's 
+    close event.
 
     Returns `true` in case the connection was closed or `false` in case it 
     was not.
@@ -228,12 +252,12 @@ A remote is only recognized as being connected after it was accepted.
 
 #### Events
 
-- __message__ => *function(message)*
+- __message__ => *function(any:message)*
 
     Emitted when a `message` is received from a remote. 
     
 
-- __close__ => *function(closedByRemote)*
+- __close__ => *function(boolean:closedByRemote)*
 
     Emitted when the remote is disconnected from the server.
 
@@ -250,7 +274,7 @@ interface that is consistent with the lithium server.
 
 #### Methods
 
-- __lithium.Client([callback] [, encoder, decoder])__ *(Constructor)*
+- __lithium.Client([function:callback] [, function:encoder, function:decoder])__ *(Constructor)*
 
     The optional `callback` argument is shortcut for the `connection` event.
 
@@ -260,29 +284,34 @@ interface that is consistent with the lithium server.
     For example, in order to process and treat all messages as JSON objects pass
 
 
-- __connect(port [, hostname])__
+- __connect(integer:port [, string:hostname])__
 
     Connects to the server at `port` and - optionally - `hostname`.
 
     
-- __isConnected()__ 
+- __isConnected()__  => *boolean*
 
     Returns `true` in case the client is currently connected to the server.
 
 
-- __send(message)__
+- __send(any:message)__ => *boolean*
 
     Sends a `message` to the remote.
 
-    Throws an error in case the connection is not yet open or was closed.
+    Returns `true` in case the message was send or `false` in case it could 
+    not be send.
 
 
-- __close([message])__
+- __close()__ => *boolean*
 
-    Closes the connection to the server, and optional `message` can be send 
+    Closes the connection to the server.
     right before the connection is being closed.
 
-    Throws an error in case the connection is already closed.
+    The optional `reason` is only supported in newer versions of the WebSocket 
+    protocol and will be available as the `reason` property on the WebSocket's 
+    close event.
+
+    Returns `false` in case the server is already closed.
 
 
 #### Events
@@ -292,12 +321,12 @@ interface that is consistent with the lithium server.
     Emitted once the connection to the server is established.
 
 
-- __message__ => *function(message)*
+- __message__ => *function(any:message)*
 
     Emitted when a `message` is received from the server. 
 
 
-- __close__ => *function(closedByServer)*
+- __close__ => *function(boolean:closedByServer)*
 
     Emitted when the client is disconnected from the server.
 
