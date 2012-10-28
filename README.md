@@ -6,8 +6,9 @@ __Lithium__ is a data centric WebSocket library for both Node.js and the Browser
 ## Installation
     
 #### Client
-
-    <script type="text/javascript" src="lithium.client.js"></script>
+```html
+<script type="text/javascript" src="lithium.client.js"></script>
+```
 
 #### Server
 
@@ -20,34 +21,36 @@ Below is an example of a simple, JSON based echo server.
 
 #### Client
 
-    var client = lithium.Client(function(client) {
+```javascript
+var client = lithium.Client(function(client) {
 
-        client.on('message', function(msg) {
-            ...
-        });
+    client.on('message', function(msg) {
+        ...
+    });
 
-        client.send({
-            msg: 'Hello World'
-        });
+    client.send({
+        msg: 'Hello World'
+    });
 
-    }, JSON.stringify, JSON.parse);
-
+}, JSON.stringify, JSON.parse);
+```
 
 #### Server
 
-    var lithium = require('lithium');
+```javascript
+var lithium = require('lithium');
 
-    var server = new lithium.Server(function(remote) {
+var server = new lithium.Server(function(remote) {
 
-        remote.accept();
-        remote.on('message', function(msg) {
-            remote.send(msg);
-        });
+    remote.accept();
+    remote.on('message', function(msg) {
+        remote.send(msg);
+    });
 
-    }, JSON.stringify, JSON.parse);
-    
-    server.listen(8000);
+}, JSON.stringify, JSON.parse);
 
+server.listen(8000);
+```
 
 ## Features
 
