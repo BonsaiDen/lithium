@@ -70,7 +70,7 @@ A `http.Server`-like interface for managing web socket connections.
 
 #### Methods
 
-- __lithium.Server([function:callback] [, function:encoder, function:decoder])__ *(Constructor)*
+- __Constructor - lithium.Server([Function:callback] [, Function:encoder, Function:decoder])__
 
     Creates a new server instance.
 
@@ -82,7 +82,7 @@ A `http.Server`-like interface for managing web socket connections.
     For example, in order to process and treat all messages as JSON objects pass
 
 
-- __listen(integer:port [, string:hostname])__
+- __listen(Number:port [, String:hostname])__
 
     Makes the server listen for incoming web socket requests on `port` and - 
     optionally - `hostname`.
@@ -94,7 +94,7 @@ A `http.Server`-like interface for managing web socket connections.
     instance of `http.Server` or `https.Server`.
 
 
-- __remotes([function:filter])__
+- __Array[Remote] - remotes([Function:filter])__
 
     Returns a array with all remotes that are currently connected to the server 
     (meaning that only accepted remotes will be contained in the array).
@@ -103,7 +103,7 @@ A `http.Server`-like interface for managing web socket connections.
     filters the remotes before returning them.
 
 
-- __send(any:message [, function:filter])__
+- __Integer - send(Any:message [, Function:filter])__
 
     Sends a message to all *accepted* remotes on the server. 
 
@@ -113,7 +113,7 @@ A `http.Server`-like interface for managing web socket connections.
     Returns the number of remotes the message was sent to.
 
 
-- __close([string:reason])__
+- __Boolean - close([string:reason])__
     
     Closes the server by preventing any furhter connections to be made and 
     invokes the `close` method of all the server's remotes.
@@ -127,22 +127,22 @@ A `http.Server`-like interface for managing web socket connections.
 
 #### Events
 
-- __connection__ => *function(remote)*
+- __connection(Remote:remote)__
 
     Emitted when a `remote` connects to the server.
 
 
-- __accepted__ => *function(remote)*
+- __accepted(Remote:remote)__
 
     Emitted when the server accepts a `remote`.
 
 
-- __rejected__ => *function(remote)*
+- __rejected(Remote:remote)__
 
     Emitted when the server rejects a `remote`.
 
 
-- __closed__ => *function(remote, closedByRemote)*
+- __closed(Remote:remote, Boolean:closedByRemote)__
 
     Emitted when a `remote` disconnects from the server.
 
@@ -150,7 +150,7 @@ A `http.Server`-like interface for managing web socket connections.
     by the remote.
 
 
-- __close__
+- __close()__
 
     Emitted when the server stops listening for new connections.
 
@@ -164,36 +164,37 @@ A remote is only recognized as being connected after it was accepted.
 
 #### Properties
 
-- __id__ *string*
+- __String - id__
 
 
-- __address__  *string*
+- __String - address__
 
     Address of the underlying socket connection.
 
 
-- __port__  *integer*
+- __Intege - port__
 
     Port of the underlying socket connection.
 
 
-- __bytesSend__  *integer*
-
-    Number of raw bytes (including protocol overhead) send over the socket.
-
-- __bytesReceived__  *integer*
+- __Integer - bytesSend__
 
     Number of raw bytes (including protocol overhead) send over the socket.
 
 
-- __version__ *integer*
+- __Integer - bytesReceived__
+
+    Number of raw bytes (including protocol overhead) send over the socket.
+
+
+- __Integer - version__
 
     The version of the underlying WebSocket protocol for this remote.
 
 
 #### Methods
 
-- __accept()__ => *boolean*
+- __Boolean - accept()__
 
     Accepts a pending remote connection, which adds it to the list of connected 
     remotes on the server.
@@ -204,7 +205,7 @@ A remote is only recognized as being connected after it was accepted.
     not be accepted.
 
 
-- __reject([string:reason])__ => *boolean*
+- __Boolean - reject([String:reason])__
 
     Rejects a pending remote and sends an optional `reason` as a message before 
     closing the connection. 
@@ -213,14 +214,14 @@ A remote is only recognized as being connected after it was accepted.
     not be rejected.
 
 
-- __isPending()__ => *true*
+- __Boolean - isPending()__
     
     Returns whether or not the connection is pending.
 
     Pending means that the connection is yet to be either accepted or rejected.
 
 
-- __info()__ => *object*
+- __Object - info()__
 
     Returns a object containing connection specific information:
 
@@ -234,7 +235,7 @@ A remote is only recognized as being connected after it was accepted.
     > Note: The returned object is a reference.
 
 
-- __send(any:message)__ => *boolean*
+- __Boolean - send(any:message)__
     
     Sends a `message` to the remote.
 
@@ -242,7 +243,7 @@ A remote is only recognized as being connected after it was accepted.
     not be send.
 
 
-- __close([any:reason])__
+- __Boolean - close([Any:reason])__
 
     Closes the connection to the remote. 
     
@@ -256,12 +257,12 @@ A remote is only recognized as being connected after it was accepted.
 
 #### Events
 
-- __message__ => *function(any:message)*
+- __message(Any:message)__
 
     Emitted when a `message` is received from a remote. 
     
 
-- __close__ => *function(boolean:closedByRemote)*
+- __close(Boolean:closedByRemote)__
 
     Emitted when the remote is disconnected from the server.
 
@@ -278,7 +279,7 @@ interface that is consistent with the lithium server.
 
 #### Methods
 
-- __lithium.Client([function:callback] [, function:encoder, function:decoder])__ *(Constructor)*
+- __Constructor - lithium.Client([Function:callback] [, Function:encoder, Function:decoder])__ *(Constructor)*
 
     The optional `callback` argument is shortcut for the `connection` event.
 
@@ -288,17 +289,17 @@ interface that is consistent with the lithium server.
     For example, in order to process and treat all messages as JSON objects pass
 
 
-- __connect(integer:port [, string:hostname])__
+- __Boolean - connect(Integer:port [, String:hostname])__
 
     Connects to the server at `port` and - optionally - `hostname`.
 
     
-- __isConnected()__  => *boolean*
+- __Boolean - isConnected()__
 
     Returns `true` in case the client is currently connected to the server.
 
 
-- __send(any:message)__ => *boolean*
+- __Boolean - send(any:message)__
 
     Sends a `message` to the remote.
 
@@ -306,7 +307,7 @@ interface that is consistent with the lithium server.
     not be send.
 
 
-- __close()__ => *boolean*
+- __Boolean - close()__
 
     Closes the connection to the server.
 
@@ -315,17 +316,17 @@ interface that is consistent with the lithium server.
 
 #### Events
 
-- __connection__
+- __connection()__
 
     Emitted once the connection to the server is established.
 
 
-- __message__ => *function(any:message)*
+- __message(Any:message)__
 
     Emitted when a `message` is received from the server. 
 
 
-- __close__ => *function(boolean:closedByServer)*
+- __close(Boolean:closedByServer)__
 
     Emitted when the client is disconnected from the server.
 
