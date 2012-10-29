@@ -6,6 +6,7 @@ __Lithium__ is a data centric WebSocket library for both Node.js and the Browser
 ## Installation
     
 #### Client
+
 ```html
 <script type="text/javascript" src="lithium.client.js"></script>
 ```
@@ -308,13 +309,8 @@ interface that is consistent with the lithium server.
 - __close()__ => *boolean*
 
     Closes the connection to the server.
-    right before the connection is being closed.
 
-    The optional `reason` is only supported in newer versions of the WebSocket 
-    protocol and will be available as the `reason` property on the WebSocket's 
-    close event.
-
-    Returns `false` in case the server is already closed.
+    Returns `false` in case the connection is already closed.
 
 
 #### Events
