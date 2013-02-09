@@ -34,12 +34,13 @@
 
         this._isBinary = false;
         this._isConnected = false;
+        this._wasConnected = false;
         this._closedByRemote = true;
 
         this._encoder = encoder || function(msg) { return msg; };
         this._decoder = decoder || function(msg) { return msg; };
 
-        this.on('connection', this._callback, this);
+        this._callback && this.on('connection', this._callback, this);
 
     }
 
@@ -83,6 +84,7 @@
             };
 
             this._socket.onclose = function(msg) {
+                that._wasConnected = that._isConnected;
                 that._isConnected = false;
                 that.emit('close', that._closedByRemote, msg.reason, msg.code);
             };
@@ -93,6 +95,10 @@
 
         isConnected: function() {
             return this._isConnected;
+        },
+
+        wasConnected: function() {
+            return this._wasConnected;
         },
 
         send: function(msg) {

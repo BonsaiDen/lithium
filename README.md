@@ -94,6 +94,11 @@ A `http.Server`-like interface for managing web socket connections.
     instance of `http.Server` or `https.Server`.
 
 
+- __Boolean - isRunning()__
+
+    Returns whether the server is running (listening for new connections).
+
+
 - __Array[Remote] - remotes([Function:filter])__
 
     Returns a array with all remotes that are currently connected to the server 
@@ -221,20 +226,6 @@ A remote is only recognized as being connected after it was accepted.
     Pending means that the connection is yet to be either accepted or rejected.
 
 
-- __Object - info()__
-
-    Returns a object containing connection specific information:
-
-        {
-            ip: "127.0.0.1"
-            port: 35758,
-            bytesSend: 123,
-            bytesReceived: 456
-        }
-
-    > Note: The returned object is a reference.
-
-
 - __Boolean - send(any:message)__
     
     Sends a `message` to the remote.
@@ -299,6 +290,11 @@ interface that is consistent with the lithium server.
     Returns `true` in case the client is currently connected to the server.
 
 
+- __Boolean - wasConnected()__
+
+    Returns `true` in case the client was connected to the server before it closed.
+
+
 - __Boolean - send(any:message)__
 
     Sends a `message` to the remote.
@@ -326,7 +322,7 @@ interface that is consistent with the lithium server.
     Emitted when a `message` is received from the server. 
 
 
-- __close(Boolean:closedByServer)__
+- __close(Boolean:closedByServer, String:reason, Integer:code)__
 
     Emitted when the client is disconnected from the server.
 
