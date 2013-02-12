@@ -32,7 +32,6 @@
         this._socket = null;
         this._callback = callback;
 
-        this._isBinary = false;
         this._isConnected = false;
         this._wasConnected = false;
         this._closedByRemote = true;
@@ -54,11 +53,9 @@
 
             var Ws = typeof WebSocket !== 'undefined' ? WebSocket : MozWebSocket;
             try {
-                this._socket = new Ws('ws' + (secure ? 's' : '') + '://' + hostname + (port !== undefined ? ':' + port : ''));
-                this._isBinary = false; //typeof ArrayBuffer !== 'undefined' && typeof this._socket.binaryType !== 'undefined';
-                if (this._isBinary) {
-                    this._socket.binaryType = 'arraybuffer';
-                }
+                this._socket = new Ws('ws' + (secure ? 's' : '') + '://'
+                                        + hostname + (port !== undefined ? ':'
+                                        + port : ''));
 
             } catch(e) {
                 return e;
@@ -72,15 +69,7 @@
             };
 
             this._socket.onmessage = function(msg) {
-
-                var data = msg.data;
-                if (that._isBinary && msg.data instanceof ArrayBuffer) {
-                    var bytes = new Uint8Array(msg.data);
-                    data = String.fromCharCode.apply(null, bytes);
-                }
-
-                that.emit('message', that._decoder(data));
-
+                that.emit('message', that._decoder(msg.data));
             };
 
             this._socket.onclose = function(msg) {
@@ -101,31 +90,14 @@
             return this._wasConnected;
         },
 
-        send: function(msg) {
+        send: function(message) {
 
             if (!this.isConnected()) {
                 return false;
-
-            } else {
-
-                var data = this._encoder(msg);
-                if (this._isBinary) {
-
-                    var len = data.length,
-                        bytes = new Uint8Array(len);
-
-                    for(var i = 0; i < len; i++) {
-                        bytes[i] = data.charCodeAt(i);
-                    }
-
-                    data = bytes.buffer;
-
-                }
-
-                this._socket.send(data);
-                return true;
-
             }
+
+            this._socket.send(this._encoder(message));
+            return true;
 
         },
 
@@ -133,25 +105,16 @@
 
             if (!this.isConnected()) {
                 return false;
-
-            } else {
-                this._closedByRemote = false;
-                this._socket.close();
-                return true;
             }
+
+            this._closedByRemote = false;
+            this._socket.close();
+            return true;
 
         },
 
 
         // Events -------------------------------------------------------------
-
-        /**
-          * {Function} Bind a @callback {Function} for any event with the @name {String}
-          * in the optional @scope {Object?} and return the @callback.
-          *
-          * In case @once {Boolean} is set, the callback will be unbound after it has
-          * been fired once.
-          */
         on: function(name, callback, scope, once) {
 
             var events = null;
@@ -170,16 +133,10 @@
 
         },
 
-        /**
-          * Like {Emitter#on} but will only fire once and then get removed.
-          */
         once: function(name, callback, scope) {
             return this.on(name, callback, scope, true);
         },
 
-        /**
-          * Emits the event @name {String} with the params @arguments {Arguments}
-          */
         emit: function(name) {
 
             var id = name;
@@ -222,14 +179,6 @@
 
         },
 
-        /**
-          * {Integer} If the first argument is a {Function} all events for the given function
-          * will be unbound. If only @name {String} is set, all callbacks for the
-          * given event will be removed. If both parameters are set, they'll act
-          * as a filter.
-          *
-          * Returns the number of unbound callbacks.
-          */
         unbind: function(name, func) {
 
             if (typeof name === 'function') {

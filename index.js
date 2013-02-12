@@ -18,5 +18,5 @@
   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   * THE SOFTWARE.
   */
-exports.Server = require('./lib/Server');
+module.exports = require('./lib');
 
