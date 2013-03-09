@@ -2,7 +2,7 @@
     "version": "0.0.2",
     "name": "lithium",
     "description": "A data centric WebSocket library for both Node.js and the Browser.",
-    "keywords": ["web socket", "", "", ""],
+    "keywords": ["websocket"],
 
     "author": "Ivo Wetzel <ivo.wetzel@googlemail.com>",
     "repository": {

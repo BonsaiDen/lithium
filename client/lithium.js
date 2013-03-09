@@ -225,7 +225,9 @@
 
     };
 
-    exports.Client = Client;
+    exports.lithium = {
+        Client: Client
+    };
 
 })(typeof exports !== 'undefined' ? exports : (this.lithium = {}));
 
