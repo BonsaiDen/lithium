@@ -23,7 +23,7 @@ Below is an example of a simple, JSON based echo server.
 #### Client
 
 ```javascript
-var client = lithium.Client(function(client) {
+var client = new lithium.Client(function(client) {
 
     client.on('message', function(msg) {
         ...
