@@ -229,5 +229,5 @@
         Client: Client
     };
 
-})(typeof exports !== 'undefined' ? exports : (this.lithium = {}));
+})(typeof exports !== 'undefined' ? exports : this);
 
