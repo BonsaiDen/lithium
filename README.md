@@ -70,7 +70,7 @@ A `http.Server`-like interface for managing web socket connections.
 
 #### Methods
 
-- __Constructor - lithium.Server([Function:callback] [, Function:encoder, Function:decoder])__
+- __Constructor - lithium.Server([Function:callback] [, Function:encoder, Function:decoder] [, Number:maxFrameSize] [, Number:delay])__
 
     Creates a new server instance.
 
@@ -78,6 +78,12 @@ A `http.Server`-like interface for managing web socket connections.
 
     If both the `encoder` and `decoder` arguments are present, messages will be 
     passed to these functions when being send / received.
+
+    The `maxFrameSize` parameter will kill any connections that send a frame 
+    with more than `32768` bytes by default.
+
+    `delay` introduces an optional read *and* write delay for all connections. 
+    Its specified in milliseconds, `250ms` will result in a total roundtrip of `500ms`.
 
     For example, in order to process and treat all messages as JSON objects pass
 
