@@ -1,5 +1,5 @@
 {
-    "version": "0.1.0",
+    "version": "0.1.1",
     "name": "lithium",
     "description": "A data centric WebSocket library for both Node.js and the Browser.",
     "keywords": ["websocket"],

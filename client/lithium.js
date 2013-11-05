@@ -36,6 +36,9 @@
         this._wasConnected = false;
         this._closedByRemote = true;
 
+        this._port = null;
+        this._host = null;
+
         this._encoder = encoder || function(msg) { return msg; };
         this._decoder = decoder || function(msg) { return msg; };
 
@@ -78,6 +81,9 @@
                 that.emit('close', that._closedByRemote, msg.reason, msg.code);
             };
 
+            this._host = hostname;
+            this._port = port || 80;
+
             return true;
 
         },
@@ -111,6 +117,10 @@
             this._socket.close();
             return true;
 
+        },
+
+        toString: function() {
+            return '[Client ' + this._host + ':' + this._port + ']';
         },
 
 
